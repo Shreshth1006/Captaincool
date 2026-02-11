@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Your Cool Type? - Dettol Icy Cool</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: white;
+  background: url("stadium.png") no-repeat center center/cover;
+  position: relative;
+}
+
+/* Dark overlay */
+body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,40,0.7), rgba(0,0,80,0.85));
+  z-index: 0;
+}
+
+/* Center screen */
+.screen {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Avatar oval container */
+.avatar-container {
+  width: 220px;
+  height: 280px;
+  border-radius: 50% / 45%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 25px;
+  background: radial-gradient(circle at center, #00f2ff 0%, #002244 70%);
+  box-shadow: 0 0 40px #00f2ff;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.avatar-container::after {
+  content: "";
+  position: absolute;
+  inset: -15px;
+  border-radius: 50% / 45%;
+  background: radial-gradient(circle, rgba(0,255,255,0.4), transparent 70%);
+  z-index: -1;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Breathing animation */
+@keyframes breathe {
+  0%,100% { 
+    transform: scale(1);
+    box-shadow: 0 0 30px #00f2ff;
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 70px #00f2ff;
+  }
+}
+
+/* Glass card */
+.card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(14px);
+  padding: 35px;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(0,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.5s ease;
+}
+
+h1 {
+  margin-bottom: 15px;
+  font-size: 32px;
+  text-shadow: 0 0 15px #00f2ff;
+  letter-spacing: 1px;
+}
+
+h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+p {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.subtitle {
+  color: #00f2ff;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 16px 24px;
+  width: 100%;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,198,255,0.5);
+}
+
+button:active {
+  transform: translateY(-1px);
+}
+
+.hidden { 
+  display: none !important; 
+}
+
+/* Progress */
+.progress-container {
+  margin-bottom: 20px;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #00f2ff;
+}
+
+.progress-bar-bg {
+  height: 10px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00f2ff, #0072ff);
+  border-radius: 10px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px #00f2ff;
+}
+
+/* Question animation */
+.question-container {
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.answer-btn {
+  margin: 10px 0;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(0,198,255,0.3);
+  text-align: left;
+  padding: 16px 20px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.answer-btn:hover {
+  background: rgba(0,198,255,0.2);
+  border-color: #00f2ff;
+  transform: translateX(5px);
+}
+
+.answer-btn:active {
+  transform: scale(0.98);
+}
+
+/* Result page enhancements */
+.result-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: pop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  filter: drop-shadow(0 0 20px rgba(0,242,255,0.5));
+}
+
+@keyframes pop {
+  0% { 
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  100% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.result-title {
+  font-size: 28px;
+  margin-bottom: 12px;
+  color: #00f2ff;
+  text-shadow: 0 0 20px rgba(0,242,255,0.8);
+}
+
+.result-subtitle {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.dhoni-quote {
+  background: rgba(0,198,255,0.15);
+  border-left: 4px solid #00f2ff;
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: 8px;
+  font-style: italic;
+  color: #e0f7ff;
+}
+
+.cool-plan {
+  text-align: left;
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  border: 1px solid rgba(0,198,255,0.2);
+}
+
+.cool-plan h3 {
+  color: #00f2ff;
+  margin-bottom: 15px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.cool-plan-item {
+  display: flex;
+  align-items: flex-start;
+  margin: 12px 0;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.cool-plan-item:hover {
+  background: rgba(0,198,255,0.1);
+  transform: translateX(5px);
+}
+
+.cool-plan-item::before {
+  content: "❄️";
+  margin-right: 12px;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.share-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.share-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.share-btn {
+  flex: 1;
+  padding: 12px;
+  font-size: 14px;
+  margin: 0;
+}
+
+.share-btn.twitter {
+  background: linear-gradient(135deg, #1DA1F2, #0d8bd9);
+}
+
+.share-btn.facebook {
+  background: linear-gradient(135deg, #4267B2, #365899);
+}
+
+.share-btn.whatsapp {
+  background: linear-gradient(135deg, #25D366, #1ebd59);
+}
+
+.personality-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #00f2ff, #0072ff);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 15px 0;
+  box-shadow: 0 4px 15px rgba(0,198,255,0.4);
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #00f2ff;
+  display: block;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+/* Streak notification */
+.streak-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #00f2ff, #0072ff);
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 50px rgba(0,198,255,0.8);
+  z-index: 1000;
+  animation: streakPopIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  min-width: 300px;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+.streak-notification.fadeOut {
+  animation: streakFadeOut 0.5s ease forwards;
+  animation-delay: 3s;
+}
+
+@keyframes streakPopIn {
+  0% { 
+    transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.1) rotate(10deg);
+  }
+  100% { 
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes streakFadeOut {
+  to {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.streak-icon {
+  font-size: 60px;
+  animation: fireFlicker 0.5s infinite alternate;
+}
+
+@keyframes fireFlicker {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+.streak-text {
+  font-size: 24px;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.streak-subtext {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* Ice particles for waterfall effect */
+.ice-particle {
+  position: fixed;
+  font-size: 24px;
+  pointer-events: none;
+  z-index: 999;
+  animation: fallDown 2s linear forwards;
+  opacity: 0;
+}
+
+@keyframes fallDown {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+/* Timer circle */
+.timer-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+}
+
+.timer-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: conic-gradient(#00f2ff 0%, #00f2ff var(--progress), rgba(255,255,255,0.1) var(--progress));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0,242,255,0.5);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.timer-circle.urgent {
+  animation: urgentPulse 0.5s ease-in-out infinite;
+  background: conic-gradient(#ff4444 0%, #ff4444 var(--progress), rgba(255,255,255,0.1) var(--progress));
+  box-shadow: 0 0 30px rgba(255,68,68,0.8);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes urgentPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,68,68,0.8); }
+  50% { transform: scale(1.1); box-shadow: 0 0 50px rgba(255,68,68,1); }
+}
+
+.timer-text {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.timer-label {
+  text-align: center;
+  font-size: 14px;
+  color: #00f2ff;
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
+
+.timer-label.urgent {
+  color: #ff4444;
+  animation: blink 0.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Download button styling */
+.download-btn {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  margin-top: 10px;
+}
+
+.download-btn:hover {
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.5);
+}
+
+/* Result card for download */
+.result-card-download {
+  background: linear-gradient(135deg, #001f3f, #003d5c);
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 600px;
+  margin: 20px auto;
+  border: 2px solid #00f2ff;
+  box-shadow: 0 10px 40px rgba(0,242,255,0.4);
+}
+
+.comparison-stat {
+  background: rgba(0,198,255,0.15);
+  padding: 12px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border-left: 4px solid #00f2ff;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comparison-stat::before {
+  content: "📊";
+  font-size: 20px;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  h1 { font-size: 24px; }
+  h2 { font-size: 18px; }
+  .card { padding: 25px; }
+  .avatar-container {
+    width: 180px;
+    height: 240px;
+  }
+  .share-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Loading animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #00f2ff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Opening Screen -->
+<div id="opening" class="screen">
+  <div class="avatar-container">
+  <img id="avatarImage"
+       src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:384/plain/https://attic.sh/npo8b1h6da5q7kpohrtvpwtzkjbw"
+       src=" https://imgproxy.attic.sh/insecure/f:webp/q:90/w:1920/plain/https://attic.sh/zo40e1kmg2qi5svxfzg89fcb7yk5"
+       class="avatar-img"
+       alt="Captain Avatar">
+</div>
+
+
+  <div class="card">
+    <h1>⚡ WHAT'S YOUR COOL TYPE? ⚡</h1>
+    <p class="subtitle">A Dettol Icy Cool Personality Quiz</p>
+    <p style="margin: 15px 0;">
+      <strong>"Pressure reveals character. Champions stay cool."</strong><br>
+      <em>- MS Dhoni</em>
+    </p>
+    <p style="margin-top:15px; opacity: 0.9;">
+      Face 8 high-pressure scenarios from cricket, work, and life.
+      Discover if you're a <h3><b> 🧠 cool strategist</b>|<b>🌬️heat defuser</b>|<b> 👑 captain cool</b>.</h3>
+    </p>
+    <p style="margin-top:10px; font-size: 14px; color: #00f2ff;">
+      ⏱️ Takes 2 minutes | 🎯 Get personalized cooling tips
+    </p>
+    <button onclick="startQuiz()">🏏 START THE QUIZ</button>
+  </div>
+</div>
+
+<!-- Quiz Screen -->
+<div id="quiz" class="screen hidden">
+  <div class="card">
+    <div class="timer-container">
+      <div class="timer-circle" id="timer-circle" style="--progress: 100%">
+        <span class="timer-text" id="timer-text">10</span>
+      </div>
+    </div>
+    <p class="timer-label" id="timer-label">Time Pressure! ⚡</p>
+    
+    <div class="progress-container">
+      <div class="progress-text">
+        <span id="progress-number"></span>
+        <span id="progress-percent"></span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+    
+    <div class="question-container" id="question-container">
+      <h2 id="question"></h2>
+      <div id="answers"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Result Screen -->
+<div id="result" class="screen hidden">
+  <div class="card">
+    <div class="result-icon" id="result-icon"></div>
+    <h2 class="result-title" id="result-title"></h2>
+    <div class="personality-badge" id="result-badge"></div>
+    <p class="result-subtitle" id="result-desc"></p>
+    
+    <div class="stats-container">
+      <div class="stat-item">
+        <span class="stat-value" id="score-main">0</span>
+        <span class="stat-label">Your Score</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="max-streak">0</span>
+        <span class="stat-label">Max Streak</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value" id="time-bonus">0</span>
+        <span class="stat-label">⚡ Speed Bonus</span>
+      </div>
+    </div>
+    
+    <div class="comparison-stat" id="comparison-stat"></div>
+    
+    <div class="dhoni-quote" id="dhoni-quote"></div>
+    
+    <div class="cool-plan" id="cool-plan"></div>
+    
+    <div class="share-section">
+      <p style="margin-bottom: 10px; font-size: 14px;">Share your Cool Type:</p>
+      <div class="share-buttons">
+        <button class="share-btn twitter" onclick="shareTwitter()">
+          🐦 Twitter
+        </button>
+        <button class="share-btn facebook" onclick="shareFacebook()">
+          📘 Facebook
+        </button>
+        <button class="share-btn whatsapp" onclick="shareWhatsApp()">
+          💬 WhatsApp
+        </button>
+      </div>
+      <button class="download-btn" onclick="downloadResult()">
+        📥 Download Result Card
+      </button>
+    </div>
+    
+    <button onclick="restart()" style="margin-top: 20px;">
+      🔄 PLAY AGAIN
+    </button>
+  </div>
+</div>
+
+<script>
+const avatarImages = [
+  "https://imgproxy.attic.sh/insecure/f:webp/q:90/w:384/plain/https://attic.sh/npo8b1h6da5q7kpohrtvpwtzkjbw",
+  "https://imgproxy.attic.sh/insecure/f:webp/q:90/w:1920/plain/https://attic.sh/zo40e1kmg2qi5svxfzg89fcb7yk5"
+];
+
+let currentAvatar = 0;
+
+setInterval(() => {
+  currentAvatar = (currentAvatar + 1) % avatarImages.length;
+  document.getElementById("avatarImage").src = avatarImages[currentAvatar];
+}, 4000); // change every 4 seconds
+
+/* EXPANDED QUESTION POOL - 15 questions, quiz shows 8 random */
+let questionStats = {
+  // Track answer distribution for "X% chose differently" feature
+  answers: {}
+};
+
+let currentStreak = 0;
+let maxStreak = 0;
+let lastAnswerType = null;
+
+// Timer configuration
+const QUESTION_TIME_LIMIT = 10; // seconds
+let timerInterval = null;
+let timeRemaining = QUESTION_TIME_LIMIT;
+let totalTimeBonus = 0;
+
+const fullQuestions = [
+  // CRICKET SCENARIOS
+  { 
+    q:"🏏 Final over. 6 runs needed. Bowler is nervous. You:", 
+    category: "cricket",
+    a:[
+      {t:"Give calm, clear instructions", type:"captain"},
+      {t:"Shout loud encouragement", type:"defuser"},
+      {t:"Signal a strategic field change", type:"strategist"}
+    ]
+  },
+
+  { 
+    q:"🏏 You drop an easy catch in a crucial moment:", 
+    category: "cricket",
+    a:[
+      {t:"Reset immediately, move on", type:"captain"},
+      {t:"Show visible frustration", type:"defuser"},
+      {t:"Smile and regain composure", type:"strategist"}
+    ]
+  },
+
+  { 
+    q:"🏏 Umpire gives a controversial decision against you:", 
+    category: "cricket",
+    a:[
+      {t:"Respect it, move on silently", type:"captain"},
+      {t:"Argue emotionally with gestures", type:"defuser"},
+      {t:"Discuss calmly, accept decision", type:"strategist"}
+    ]
+  },
+
+  { 
+    q:"🏏 Your team is losing momentum mid-innings:", 
+    category: "cricket",
+    a:[
+      {t:"Slow the game, break rhythm", type:"strategist"},
+      {t:"Play risky, aggressive shots", type:"defuser"},
+      {t:"Restore calm energy, steady ship", type:"captain"}
+    ]
+  },
+
+  { 
+    q:"🏏 Opposition sledges and tries to intimidate:", 
+    category: "cricket",
+    a:[
+      {t:"Completely ignore them", type:"strategist"},
+      {t:"Respond with words/gestures", type:"defuser"},
+      {t:"Smile, stay unbothered", type:"captain"}
+    ]
+  },
+
+  // WORK/OFFICE SCENARIOS
+  { 
+    q:"💼 Presentation to CEO in 10 mins. AC fails. You're sweating:", 
+    category: "work",
+    a:[
+      {t:"Panic, reschedule meeting", type:"defuser"},
+      {t:"Splash water, hope for best", type:"strategist"},
+      {t:"Use Dettol Icy Cool, stay composed", type:"captain"}
+    ]
+  },
+
+  { 
+    q:"💼 Client blames you for a colleague's mistake in meeting:", 
+    category: "work",
+    a:[
+      {t:"Take responsibility, fix later", type:"captain"},
+      {t:"Defend yourself immediately", type:"defuser"},
+      {t:"Clarify calmly with facts", type:"strategist"}
+    ]
+  },
+
+  { 
+    q:"💼 Boss gives you impossible deadline for project:", 
+    category: "work",
+    a:[
+      {t:"Work overnight, push through", type:"defuser"},
+      {t:"Negotiate realistic timeline", type:"strategist"},
+      {t:"Accept calmly, prioritize smartly", type:"captain"}
+    ]
+  },
+
+  // DAILY LIFE SCENARIOS
+  { 
+    q:"🌞 After long commute in summer heat, you reach office:", 
+    category: "life",
+    a:[
+      {t:"Ignore sweat, start working", type:"defuser"},
+      {t:"Wash face with regular water", type:"strategist"},
+      {t:"Use intense cooling body wash", type:"captain"}
+    ]
+  },
+
+  { 
+    q:"🎯 Stuck in traffic, getting late for important event:", 
+    category: "life",
+    a:[
+      {t:"Honk aggressively, get angry", type:"defuser"},
+      {t:"Find alternate route on map", type:"strategist"},
+      {t:"Stay calm, call to inform", type:"captain"}
+    ]
+  },
+
+  { 
+    q:"🍽️ You're on a first date. Food comes cold and wrong:", 
+    category: "life",
+    a:[
+      {t:"Complain loudly to waiter", type:"defuser"},
+      {t:"Politely send it back", type:"strategist"},
+      {t:"Laugh it off, make it fun", type:"captain"}
+    ]
+  },
+
+  { 
+    q:"💰 ATM swallows your card before weekend trip:", 
+    category: "life",
+    a:[
+      {t:"Panic, cancel plans", type:"defuser"},
+      {t:"Use backup payment methods", type:"strategist"},
+      {t:"Stay cool, handle it calmly", type:"captain"}
+    ]
+  },
+
+  // PRESSURE SCENARIOS
+  { 
+    q:"⚡ You're overwhelmed with 10 urgent tasks:", 
+    category: "pressure",
+    a:[
+      {t:"Do everything at once", type:"defuser"},
+      {t:"Prioritize logically, delegate", type:"strategist"},
+      {t:"Slow down, lead with clarity", type:"captain"}
+    ]
+  },
+
+  { 
+    q:"🏃 Running late, sweating profusely before interview:", 
+    category: "pressure",
+    a:[
+      {t:"Rush in as you are", type:"defuser"},
+      {t:"Find washroom, splash water", type:"strategist"},
+      {t:"Use cooling wipes, compose yourself", type:"captain"}
+    ]
+  },
+
+  { 
+    q:"🎤 Asked to speak unexpectedly in large meeting:", 
+    category: "pressure",
+    a:[
+      {t:"Get nervous, speak hesitantly", type:"defuser"},
+      {t:"Think quickly, structure points", type:"strategist"},
+      {t:"Take breath, speak confidently", type:"captain"}
+    ]
+  }
+];
+
+let activeQuestions = [];
+let currentQuestionIndex = 0;
+let scores = { strategist:0, defuser:0, captain:0 };
+const totalQuestions = 8;
+
+function startQuiz(){
+  document.getElementById("opening").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+
+  // Shuffle and select 8 random questions
+  activeQuestions = shuffle([...fullQuestions]).slice(0, totalQuestions);
+  currentQuestionIndex = 0;
+  scores = { strategist:0, defuser:0, captain:0 };
+  
+  // Reset streak tracking
+  currentStreak = 0;
+  maxStreak = 0;
+  lastAnswerType = null;
+  totalTimeBonus = 0;
+  
+  showQuestion();
+}
+
+function shuffle(array){
+  const arr = [...array];
+  for(let i = arr.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function showQuestion(){
+  const qObj = activeQuestions[currentQuestionIndex];
+  const questionNum = currentQuestionIndex + 1;
+  
+  // Update progress
+  document.getElementById("progress-number").innerText = `Question ${questionNum} of ${totalQuestions}`;
+  document.getElementById("progress-percent").innerText = `${Math.round((questionNum/totalQuestions)*100)}%`;
+  document.getElementById("progress-bar").style.width = ((questionNum/totalQuestions)*100) + "%";
+
+  // Update question
+  document.getElementById("question").innerText = qObj.q;
+  
+  // Add slide-in animation
+  const container = document.getElementById("question-container");
+  container.style.animation = 'none';
+  setTimeout(() => {
+    container.style.animation = 'slideIn 0.5s ease';
+  }, 10);
+
+  // Create answer buttons
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  // Shuffle answers for variety
+  const shuffledAnswers = shuffle(qObj.a);
+  
+  shuffledAnswers.forEach(ans=>{
+    const btn = document.createElement("button");
+    btn.className = "answer-btn";
+    btn.innerText = ans.t;
+    btn.onclick = () => selectAnswer(ans.type, btn);
+    answersDiv.appendChild(btn);
+  });
+  
+  // Start timer
+  startTimer();
+}
+
+function startTimer(){
+  // Clear any existing timer
+  if(timerInterval) clearInterval(timerInterval);
+  
+  timeRemaining = QUESTION_TIME_LIMIT;
+  updateTimerDisplay();
+  
+  timerInterval = setInterval(() => {
+    timeRemaining--;
+    updateTimerDisplay();
+    
+    if(timeRemaining <= 0){
+      clearInterval(timerInterval);
+      handleTimeout();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay(){
+  const timerText = document.getElementById("timer-text");
+  const timerCircle = document.getElementById("timer-circle");
+  const timerLabel = document.getElementById("timer-label");
+  
+  timerText.innerText = timeRemaining;
+  
+  // Update progress ring
+  const progress = (timeRemaining / QUESTION_TIME_LIMIT) * 100;
+  timerCircle.style.setProperty('--progress', progress + '%');
+  
+  // Add urgent styling when time is running out
+  if(timeRemaining <= 3){
+    timerCircle.classList.add('urgent');
+    timerLabel.classList.add('urgent');
+    timerLabel.innerText = '⚠️ HURRY! ⚠️';
+  } else {
+    timerCircle.classList.remove('urgent');
+    timerLabel.classList.remove('urgent');
+    timerLabel.innerText = 'Time Pressure! ⚡';
+  }
+}
+
+function handleTimeout(){
+  // Auto-select a random answer when time runs out
+  const buttons = document.querySelectorAll(".answer-btn:not(:disabled)");
+  if(buttons.length > 0){
+    const randomBtn = buttons[Math.floor(Math.random() * buttons.length)];
+    randomBtn.click();
+    
+    // Show timeout message
+    showTimeoutMessage();
+  }
+}
+
+function showTimeoutMessage(){
+  const msg = document.createElement('div');
+  msg.className = 'streak-notification fadeOut';
+  msg.innerHTML = `
+    <span style="font-size: 40px;">⏰</span>
+    <div>
+      <div style="font-size: 20px;">Time's Up!</div>
+      <div style="font-size: 14px; opacity: 0.9;">Random answer selected</div>
+    </div>
+  `;
+  document.body.appendChild(msg);
+  
+  setTimeout(() => {
+    msg.remove();
+  }, 3500);
+}
+
+function selectAnswer(type, button){
+  // Stop timer
+  if(timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  
+  // Calculate time bonus
+  if(timeRemaining >= 7){
+    totalTimeBonus += 3; // Fast answer bonus
+  } else if(timeRemaining >= 4){
+    totalTimeBonus += 1; // Decent time bonus
+  }
+  
+  // Visual feedback
+  button.style.background = "rgba(0,198,255,0.4)";
+  button.style.borderColor = "#00f2ff";
+  
+  // Disable all buttons temporarily
+  const allButtons = document.querySelectorAll(".answer-btn");
+  allButtons.forEach(btn => btn.disabled = true);
+  
+  // Track streak
+  if(lastAnswerType === type) {
+    currentStreak++;
+    if(currentStreak >= 3) {
+      showStreakNotification(currentStreak);
+    }
+  } else {
+    currentStreak = 1;
+  }
+  
+  if(currentStreak > maxStreak) {
+    maxStreak = currentStreak;
+  }
+  
+  lastAnswerType = type;
+  
+  setTimeout(() => {
+    scores[type]++;
+    currentQuestionIndex++;
+    
+    if(currentQuestionIndex < totalQuestions) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }, 300);
+}
+
+function showStreakNotification(streak){
+  // Create waterfall ice particles
+  createIceWaterfall();
+  
+  const notification = document.createElement('div');
+  notification.className = 'streak-notification fadeOut';
+  notification.innerHTML = `
+    <div class="streak-icon">🔥</div>
+    <div class="streak-text">${streak}x STREAK!</div>
+    <div class="streak-subtext">Staying Cool Under Pressure!</div>
+  `;
+  document.body.appendChild(notification);
+  
+  // Remove after 3.5 seconds (longer than before)
+  setTimeout(() => {
+    notification.remove();
+  }, 3500);
+}
+
+function createIceWaterfall(){
+  const particles = ['❄️', '💧', '💎', '⚡', '✨'];
+  const particleCount = 30;
+  
+  for(let i = 0; i < particleCount; i++){
+    setTimeout(() => {
+      const particle = document.createElement('div');
+      particle.className = 'ice-particle';
+      particle.innerText = particles[Math.floor(Math.random() * particles.length)];
+      
+      // Random horizontal position
+      particle.style.left = Math.random() * 100 + 'vw';
+      
+      // Random delay for cascading effect
+      particle.style.animationDelay = (Math.random() * 0.5) + 's';
+      
+      // Random size variation
+      const size = 20 + Math.random() * 20;
+      particle.style.fontSize = size + 'px';
+      
+      document.body.appendChild(particle);
+      
+      // Remove after animation completes
+      setTimeout(() => {
+        particle.remove();
+      }, 2500);
+    }, i * 50); // Stagger creation for waterfall effect
+  }
+}
+
+function showResult(){
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+
+  // Determine result type
+  let resultType = Object.keys(scores).reduce((a,b)=>
+    scores[a]>scores[b] ? a : b);
+
+  // Calculate score percentage
+  const maxScore = scores[resultType];
+  const scorePercentage = Math.round((maxScore / totalQuestions) * 100);
+
+  let icon="", title="", badge="", desc="", quote="", plan="", comparisonText="";
+
+  if(resultType === "strategist"){
+    icon = "🧠";
+    title = "The Calm Strategist";
+    badge = "Strategic Thinker";
+    desc = "Like Dhoni analyzing the field, you stay composed by thinking three steps ahead. You plan, prioritize, and never let heat affect your judgment.";
+    quote = '"Process is more important than result. When the process is correct, the result takes care of itself." - MS Dhoni';
+    comparisonText = "Only 32% of players have this strategic mindset. You think like a captain!";
+    plan = `
+      <h3>❄️ Your Summer Cool Plan</h3>
+      <div class="cool-plan-item">Plan hydration breaks before you feel thirsty</div>
+      <div class="cool-plan-item">Keep Dettol Icy Cool in your bag for instant refresh</div>
+      <div class="cool-plan-item">Schedule cooling showers after peak heat hours</div>
+      <div class="cool-plan-item">Use 3x intense cooling technology daily</div>
+      <div class="cool-plan-item">Strategic breaks = Better performance all day</div>
+    `;
+  }
+  
+  if(resultType === "defuser"){
+    icon = "🌬️";
+    title = "The Heat Defuser";
+    badge = "Energy Master";
+    desc = "You manage chaos with high energy and quick adaptability. Like Dhoni's lightning-fast stumpings, you act decisively when pressure peaks.";
+    quote = '"I never allow myself to be under pressure." - MS Dhoni';
+    comparisonText = "You're among the 38% who turn heat into energy. Keep that fire burning!";
+    plan = `
+      <h3>❄️ Your Summer Cool Plan</h3>
+      <div class="cool-plan-item">Quick refresh moments between activities</div>
+      <div class="cool-plan-item">Use Dettol Icy Cool for instant heat relief</div>
+      <div class="cool-plan-item">Stay active but recover fast with cooling</div>
+      <div class="cool-plan-item">3x intense cooling keeps you energized</div>
+      <div class="cool-plan-item">Turn heat into your advantage with preparation</div>
+    `;
+  }
+  
+  if(resultType === "captain"){
+    icon = "👑";
+    title = "Captain Cool";
+    badge = "Natural Leader";
+    desc = "You are Dhoni's spirit embodied. Pressure reveals your calm leadership. While others panic, you smile, slow down, and take control.";
+    quote = '"I like to be involved in decision-making. I\'m not someone who will say \'you go ahead and take the call\'." - MS Dhoni';
+    comparisonText = "Elite 30% share your composure. True captains are rare!";
+    plan = `
+      <h3>❄️ Your Summer Cool Plan</h3>
+      <div class="cool-plan-item">Maintain discipline with daily cooling routine</div>
+      <div class="cool-plan-item">Control sweat early with Dettol Icy Cool</div>
+      <div class="cool-plan-item">Lead by example - stay fresh, stay composed</div>
+      <div class="cool-plan-item">Use 3x intense cooling as your secret weapon</div>
+      <div class="cool-plan-item">Champions prepare. Champions stay cool.</div>
+    `;
+  }
+
+  // Display results
+  document.getElementById("result-icon").innerText = icon;
+  document.getElementById("result-title").innerText = title;
+  document.getElementById("result-badge").innerText = badge;
+  document.getElementById("result-desc").innerText = desc;
+  document.getElementById("dhoni-quote").innerText = quote;
+  document.getElementById("cool-plan").innerHTML = plan;
+  document.getElementById("comparison-stat").innerText = comparisonText;
+  document.getElementById("score-main").innerText = scorePercentage + "%";
+  document.getElementById("max-streak").innerText = maxStreak + "x";
+  document.getElementById("time-bonus").innerText = totalTimeBonus + " pts";
+
+  // Animate score
+  animateScore(scorePercentage);
+  
+  // Show special badge for speed demons
+  if(totalTimeBonus >= 15){
+    setTimeout(() => {
+      showSpeedBadge();
+    }, 1000);
+  }
+}
+
+function animateScore(target){
+  const element = document.getElementById("score-main");
+  let current = 0;
+  const increment = target / 30;
+  const timer = setInterval(() => {
+    current += increment;
+    if(current >= target){
+      current = target;
+      clearInterval(timer);
+    }
+    element.innerText = Math.round(current) + "%";
+  }, 30);
+}
+
+function showSpeedBadge(){
+  const badge = document.createElement('div');
+  badge.className = 'streak-notification fadeOut';
+  badge.innerHTML = `
+    <div class="streak-icon">⚡</div>
+    <div class="streak-text">LIGHTNING FAST!</div>
+    <div class="streak-subtext">Quick decisions, true champion!</div>
+  `;
+  document.body.appendChild(badge);
+  
+  setTimeout(() => {
+    badge.remove();
+  }, 3500);
+}
+
+function restart(){
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("opening").classList.remove("hidden");
+}
+
+// Share functions
+function shareTwitter(){
+  const resultTitle = document.getElementById("result-title").innerText;
+  const text = encodeURIComponent(`I just took the "What's Your Cool Type?" quiz and I'm ${resultTitle}! 😎 How cool are you under pressure? Take the quiz! #DettolIcyCool #StayCool`);
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+}
+
+function shareFacebook(){
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+}
+
+function shareWhatsApp(){
+  const resultTitle = document.getElementById("result-title").innerText;
+  const text = encodeURIComponent(`I just discovered I'm ${resultTitle}! 😎 Find out your Cool Type with this fun quiz: ${window.location.href}`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function downloadResult(){
+  const resultTitle = document.getElementById("result-title").innerText;
+  const badge = document.getElementById("result-badge").innerText;
+  const icon = document.getElementById("result-icon").innerText;
+  const score = document.getElementById("score-main").innerText;
+  const streak = document.getElementById("max-streak").innerText;
+  const speedBonus = document.getElementById("time-bonus").innerText;
+  
+  // Create a canvas element
+  const canvas = document.createElement('canvas');
+  canvas.width = 1200;
+  canvas.height = 630;
+  const ctx = canvas.getContext('2d');
+  
+  // Background gradient
+  const gradient = ctx.createLinearGradient(0, 0, 0, 630);
+  gradient.addColorStop(0, '#001f3f');
+  gradient.addColorStop(1, '#003d5c');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 1200, 630);
+  
+  // Border
+  ctx.strokeStyle = '#00f2ff';
+  ctx.lineWidth = 8;
+  ctx.strokeRect(20, 20, 1160, 590);
+  
+  // Title
+  ctx.fillStyle = '#00f2ff';
+  ctx.font = 'bold 48px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('WHAT\'S YOUR COOL TYPE?', 600, 80);
+  
+  // Icon
+  ctx.font = '120px Arial';
+  ctx.fillText(icon, 600, 220);
+  
+  // Result title
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 56px Arial';
+  ctx.fillText(resultTitle, 600, 300);
+  
+  // Badge
+  ctx.fillStyle = '#00f2ff';
+  ctx.font = '32px Arial';
+  ctx.fillText(badge, 600, 350);
+  
+  // Stats
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 36px Arial';
+  ctx.fillText(`Score: ${score}`, 300, 450);
+  ctx.fillText(`Streak: ${streak}`, 600, 450);
+  ctx.fillText(`Speed: ${speedBonus}`, 900, 450);
+  
+  // Footer
+  ctx.fillStyle = '#00f2ff';
+  ctx.font = 'bold 28px Arial';
+  ctx.fillText('Powered by Dettol Icy Cool - 3x Intense Cooling', 600, 550);
+  
+  // Convert to image and download
+  canvas.toBlob(function(blob) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = `cool-type-${resultTitle.replace(/\s/g, '-').toLowerCase()}.png`;
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+</script>
+
+</body>
+</html>
